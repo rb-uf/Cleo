@@ -10,7 +10,7 @@ In this project, I propose a TVLA framework for RISC-V cryptography extension st
 
 ### Project Structure
 
-Here is the folder structure. both riscv-crypto and xcrypto are initialized as submodules.
+Here is the folder structure. both [riscv-crypto](https://github.com/riscv/riscv-crypto/) and [xcrypto](https://github.com/scarv/xcrypto) are initialized as submodules.
 
 ```shell
 ├── dockerfile
