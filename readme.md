@@ -8,6 +8,17 @@ The RISC-V instruction set architecture is known for its open-source and customi
 
 In this project, I propose a TVLA framework for RISC-V cryptography extension standardization work. This work will result in a complete power side-channel evaluation framework parallel to the existing test-based functional validation suite~\cite{rvcrypto_github} and functional formal verification suite~\cite{rvcrypto_github}. 
 
+### Project Structure
+
+```shell
+├── dockerfile
+│   └── dockerfile
+├── eut # extenstions under test
+│   ├── riscv-crypto
+│   └── xcrypto
+└── readme.md
+```
+
 ### Environement
 
 ```shell
