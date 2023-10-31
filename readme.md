@@ -24,7 +24,7 @@ Here is the folder structure. both [riscv-crypto](https://github.com/riscv/riscv
 Use following commands to initiate submodules
 
 ```shell
-git submodules init
+git submodule update --init --recursive
 ```
 
 ### Environement
