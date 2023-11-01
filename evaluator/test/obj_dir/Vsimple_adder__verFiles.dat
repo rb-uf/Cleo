@@ -1,0 +1,13 @@
+# DESCRIPTION: Verilator output: Timestamp data for --skip-identical.  Delete at will.
+C "-Wall --cc simple_adder.v --exe tb_simple_adder.cpp"
+S   7892640  3960048  1698798915   755661000  1598506306           0 "/usr/bin/verilator_bin"
+T      4140 14700731  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder.cpp"
+T      2643 14700729  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder.h"
+T      1822 14700733  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder.mk"
+T      1875 14700730  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder__Slow.cpp"
+T       574 14700727  1698803285   889478917  1698803285   889478917 "obj_dir/Vsimple_adder__Syms.cpp"
+T       830 14700728  1698803285   889478917  1698803285   889478917 "obj_dir/Vsimple_adder__Syms.h"
+T       296 14700734  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder__ver.d"
+T         0        0  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder__verFiles.dat"
+T      1574 14700732  1698803285   893478880  1698803285   893478880 "obj_dir/Vsimple_adder_classes.mk"
+S       152 14700724  1698803100   447128160  1698803100   447128160 "simple_adder.v"

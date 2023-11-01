@@ -31,8 +31,9 @@ git submodule update --init
 
 ```shell
 
-docker pull ....
-docker run ........
-docker exec ........
+docker pull archfx/sims
+git clone <this repo>
+docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name sims archfx/sims
+docker exec -it sims /bin/bash
 
 ```
