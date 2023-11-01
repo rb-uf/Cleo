@@ -6,3 +6,7 @@
 	path = eut/xcrypto
 	url = https://github.com/scarv/xcrypto
 	branch = master
+[submodule "eut/scarv-soc"]
+        path = eut/scarv-soc
+        url = https://github.com/scarv/scarv-soc
+        branch = master
