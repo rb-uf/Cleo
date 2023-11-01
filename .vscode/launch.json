@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/media/aruna/Archive/Cleo/evaluator/test/obj_dir",
-      "program": "/media/aruna/Archive/Cleo/evaluator/test/obj_dir/build/Debug/outDebug",
+      "cwd": "/media/aruna/Archive/Cleo/evaluator/sha",
+      "program": "/media/aruna/Archive/Cleo/evaluator/sha/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
