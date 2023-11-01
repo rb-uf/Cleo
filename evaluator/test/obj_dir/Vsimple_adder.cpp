@@ -22,6 +22,7 @@ void Vsimple_adder::eval_step() {
     QData __Vchange = 1;
     do {
         VL_DEBUG_IF(VL_DBG_MSGF("+ Clock loop\n"););
+        vlSymsp->__Vm_activity = true;
         _eval(vlSymsp);
         if (VL_UNLIKELY(++__VclockLoop > 100)) {
             // About to fail, so enable debug to see what's not settling.
@@ -42,6 +43,7 @@ void Vsimple_adder::eval_step() {
 void Vsimple_adder::_eval_initial_loop(Vsimple_adder__Syms* __restrict vlSymsp) {
     vlSymsp->__Vm_didInit = true;
     _eval_initial(vlSymsp);
+    vlSymsp->__Vm_activity = true;
     // Evaluate till stable
     int __VclockLoop = 0;
     QData __Vchange = 1;

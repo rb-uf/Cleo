@@ -13,6 +13,8 @@
 //==========
 
 class Vsimple_adder__Syms;
+class Vsimple_adder_VerilatedVcd;
+
 
 //----------
 
@@ -26,6 +28,10 @@ VL_MODULE(Vsimple_adder) {
     VL_IN8(b,3,0);
     VL_OUT8(sum,3,0);
     VL_OUT8(carry,0,0);
+    
+    // LOCAL VARIABLES
+    // Internals; generally not touched by application code
+    CData/*0:0*/ __Vm_traceActivity[1];
     
     // INTERNAL VARIABLES
     // Internals; generally not touched by application code
@@ -41,6 +47,8 @@ VL_MODULE(Vsimple_adder) {
     Vsimple_adder(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
     ~Vsimple_adder();
+    /// Trace signals in the model; called by application code
+    void trace(VerilatedVcdC* tfp, int levels, int options = 0);
     
     // API METHODS
     /// Evaluate the model.  Application must call when inputs change.
@@ -74,6 +82,16 @@ VL_MODULE(Vsimple_adder) {
   public:
     static void _eval_initial(Vsimple_adder__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _eval_settle(Vsimple_adder__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+  private:
+    static void traceChgSub0(void* userp, VerilatedVcd* tracep);
+    static void traceChgTop0(void* userp, VerilatedVcd* tracep);
+    static void traceCleanup(void* userp, VerilatedVcd* /*unused*/);
+    static void traceFullSub0(void* userp, VerilatedVcd* tracep) VL_ATTR_COLD;
+    static void traceFullTop0(void* userp, VerilatedVcd* tracep) VL_ATTR_COLD;
+    static void traceInitSub0(void* userp, VerilatedVcd* tracep) VL_ATTR_COLD;
+    static void traceInitTop(void* userp, VerilatedVcd* tracep) VL_ATTR_COLD;
+    void traceRegister(VerilatedVcd* tracep) VL_ATTR_COLD;
+    static void traceInit(void* userp, VerilatedVcd* tracep, uint32_t code) VL_ATTR_COLD;
 } VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 //----------
