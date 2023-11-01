@@ -1,6 +1,8 @@
 [submodule "eut/riscv-crypto"]
 	path = eut/riscv-crypto
 	url = https://github.com/riscv/riscv-crypto
+	branch = main
 [submodule "eut/xcrypto"]
 	path = eut/xcrypto
 	url = https://github.com/scarv/xcrypto
+	branch = master
