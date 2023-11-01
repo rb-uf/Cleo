@@ -31,9 +31,21 @@ git submodule update --init
 
 ```shell
 
-docker pull archfx/sims
+docker pull archfx/rvutils
 git clone <this repo>
-docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name sims archfx/sims
+docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name rvutils archfx/rvutils
 docker exec -it sims /bin/bash
 
 ```
+
+
+### Evaluating the SoC
+
+First initialize the SoC with below command
+```shell
+cd eut/scarv-soc
+git submodule update --init --recursive
+```
+
+This will pull clone all the submodules related to the SoC compoenents.
+
