@@ -1,4 +1,5 @@
 VERILOG_FILE = ../../eut/riscv-crypto/rtl/crypto-fu/riscv_crypto_fu_ssha512.v
+TB = tb_switiching.cpp #tb_riscv_crypto_fu_ssha512.cpp
 
 all: run
 
@@ -9,7 +10,7 @@ Vriscv_crypto_fu_ssha512: obj_dir/Vriscv_crypto_fu_ssha512.mk
 	make -C obj_dir -f Vriscv_crypto_fu_ssha512.mk Vriscv_crypto_fu_ssha512
 
 obj_dir/Vriscv_crypto_fu_ssha512.mk:
-	verilator -Wall --trace --cc $(VERILOG_FILE) --exe tb_riscv_crypto_fu_ssha512.cpp
+	verilator -Wall --trace --cc $(VERILOG_FILE) --exe $(TB)
 	cd obj_dir
 
 clean:
