@@ -4,17 +4,7 @@
 #include <vector>
 #include "verilated_vcd_c.h"
 
-
-
-void count_transitions(uint32_t prev, uint32_t curr, int& pos_trans, int& neg_trans) {
-    for (int i = 0; i < 32; ++i) {
-        bool prev_bit = (prev >> i) & 1;
-        bool curr_bit = (curr >> i) & 1;
-        if (!prev_bit && curr_bit) pos_trans++;
-        if (prev_bit && !curr_bit) neg_trans++;
-    }
-}
-
+#include <random>
 
 
 int main(int argc, char** argv) {
@@ -27,8 +17,10 @@ int main(int argc, char** argv) {
     top->trace(vcd, 99);
     vcd->open("trace.vcd");
 
-    std::vector<int> pos_transitions, neg_transitions;
-    uint32_t prev_sum = 0, prev_carry = 0;
+   // Initialize random number generator
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 1);
 
     
 
@@ -53,40 +45,39 @@ int main(int argc, char** argv) {
 
     // Add your test case code here
 
-    // Toggle the clock
-    for (int i = 0; i < 5; i++) {
-        top->g_clk = !top->g_clk;
+// Simulate for 100 clock cycles
+    for (int i = 0; i < 100; i++) {
+        // Assign random values to inputs
+        top->valid = dis(gen);
+        top->rs1 = dis(gen);
+        top->rs2 = dis(gen);
+        top->op_ssha512_sum0r = dis(gen);
+        top->op_ssha512_sum1r = dis(gen);
+        top->op_ssha512_sig0l = dis(gen);
+        top->op_ssha512_sig0h = dis(gen);
+        top->op_ssha512_sig1l = dis(gen);
+        top->op_ssha512_sig1h = dis(gen);
+        top->op_ssha512_sig0 = dis(gen);
+        top->op_ssha512_sig1 = dis(gen);
+        top->op_ssha512_sum0 = dis(gen);
+        top->op_ssha512_sum1 = dis(gen);
+
+        // Evaluate the module
         top->eval();
 
+        // Print internal signal values
+        std::cout << "Cycle " << i << std::endl;
+        std::cout << "Internal Signal Values:" << std::endl;
+        std::cout << "  sig0: " << top->riscv_crypto_fu_ssha512__DOT__rv64_ssha512__DOT__ssha512_sig0 << std::endl;
+        std::cout << "  sig1: " << top->riscv_crypto_fu_ssha512__DOT__op_ssha512_sig0l << std::endl;
 
-        int pos_trans = 0, neg_trans = 0;
-            count_transitions(prev_sum, top->sum, pos_trans, neg_trans);
-            count_transitions(prev_carry, top->carry, pos_trans, neg_trans);
-            pos_transitions.push_back(pos_trans);
-            neg_transitions.push_back(neg_trans);
+        // Dump the current simulation state
+        vcd->dump(i);
 
-            prev_sum = top->sum;
-            prev_carry = top->carry;
 
-            std::cout << "a = " << i << ", b = " << j
-                      << ", sum = " << (int)top->sum
-                      << ", carry = " << (int)top->carry 
-                      << ", Positive Transitions = " << pos_trans
-                      << ", Negative Transitions = " << neg_trans << std::endl;
+
     }
-
-    // Read outputs
-    int result = top->rd;
 
     delete top;
-
-    // Print the transitions vectors
-    std::cout << "Positive and Negative Transitions for each clock cycle: " << std::endl;
-    for (size_t i = 0; i < pos_transitions.size(); ++i) {
-        std::cout << "Cycle " << i << ": "
-                  << "Positive Transitions = " << pos_transitions[i] 
-                  << ", Negative Transitions = " << neg_transitions[i] << std::endl;
-    }
-
     return 0;
 }
