@@ -6,7 +6,7 @@ The RISC-V instruction set architecture is known for its open-source and customi
  The device's power consumption fluctuates as it executes computations, responding to changing logic states and data processing. These current variations generate distinct patterns that enable the analysis of the ongoing operations. By observing these power consumption fluctuations and correlating them with specific computations, an adversary can deduce sensitive data, such as cryptographic keys or plaintext, without needing direct access to the internal memory or processes of the target device.
 
 
-This project is a TVLA framework for RISC-V cryptography extension standardization work. This is a complete power side-channel evaluation framework parallel to the existing test-based functional validation suite~\cite{rvcrypto_github} and functional formal verification suite~\cite{rvcrypto_github}. 
+This project is a TVLA framework for RISC-V cryptography extension standardization work. This is a complete power side-channel evaluation framework parallel to the existing test-based [functional validation suite](https://github.com/riscv/riscv-crypto/) and functional [formal verification suite](https://github.com/riscv/riscv-crypto/). 
 
 ### Project Structure
 
