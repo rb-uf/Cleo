@@ -12,16 +12,22 @@ In this project, I propose a TVLA framework for RISC-V cryptography extension st
 
 Here is the folder structure. both [riscv-crypto](https://github.com/riscv/riscv-crypto/) and [xcrypto](https://github.com/scarv/xcrypto) are initialized as submodules.
 
-```shell
+
+```bash
 ├── dockerfile
-│   └── dockerfile
+│   └── Dockerfile
 ├── eut # extenstions under test
 │   ├── riscv-crypto
+│   ├── scarv-soc
 │   └── xcrypto
-└── readme.md
+├── evaluator # evaluator code
+│   ├── power_libs #common files
+│   ├── riscv_crypto_fu_ssha256
+│   └── riscv_crypto_fu_ssha512
+└── readme.md # You are looking at it
 ```
 
-Use following commands to initiate submodules
+Use the following commands to initiate submodules
 
 ```shell
 git submodule update --init
