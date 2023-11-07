@@ -73,7 +73,7 @@ void processVCDFile(std::ifstream &file, const std::string &outputFileName) {
 int main() {
     std::ifstream file("obj_dir/sim.vcd"); // Replace "example.vcd" with your VCD file's name
     if (file.is_open()) {
-        processVCDFile(file, "../toggle.csv");
+        processVCDFile(file, "toggle.csv");
         file.close();
     } else {
         std::cerr << "Unable to open file";

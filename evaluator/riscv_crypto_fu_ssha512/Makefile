@@ -1,17 +1,22 @@
-VERILOG_FILE = ../../eut/riscv-crypto/rtl/crypto-fu/riscv_crypto_fu_ssha512.v
-TB = tb_switiching.cpp #tb_riscv_crypto_fu_ssha512.cpp
+MODULE=riscv_crypto_fu_ssha512
+VMODULE=V$(MODULE)
+DUTPATH=../../eut/riscv-crypto/rtl/crypto-fu/$(MODULE).v
 
-all: run
+all: $(VMODULE) toggle
+	./obj_dir/$(VMODULE)
+	./obj_dir/toggle
 
-run: Vriscv_crypto_fu_ssha512
-	.obj_dir/Vriscv_crypto_fu_ssha512
+$(VMODULE): obj_dir/$(VMODULE).mk
+	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
 
-Vriscv_crypto_fu_ssha512: obj_dir/Vriscv_crypto_fu_ssha512.mk
-	make -C obj_dir -f Vriscv_crypto_fu_ssha512.mk Vriscv_crypto_fu_ssha512
+obj_dir/$(VMODULE).mk:
+	verilator -Wall --trace --public-flat-rw --cc -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h" $(DUTPATH) --exe tb_$(MODULE).cpp
 
-obj_dir/Vriscv_crypto_fu_ssha512.mk:
-	verilator -Wall --trace --cc $(VERILOG_FILE) --exe $(TB)
-	cd obj_dir
+
+toggle:
+	g++ toggle.cpp -o obj_dir/toggle
 
 clean:
-	rm -rf obj_dir
+	rm -rf obj_dir 
+	rm actual.csv 
+	rm toggle.csv

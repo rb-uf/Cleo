@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     // Initialize VCD trace
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99); // Trace 99 levels of hierarchy
-    tfp->open("sim.vcd"); // Open the VCD file
+    tfp->open("obj_dir/sim.vcd"); // Open the VCD file
 
     // Initialize random number generator
     std::random_device rd;
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     
     // Open a CSV file for writing
-    std::ofstream outputFile("../actual.csv");
+    std::ofstream outputFile("actual.csv");
     outputFile << "rs1 input" << "," << "rs2 input" << "," << "hw(rs1)" << "," << "hw(rs2)" << std::endl;
 
     // Simulate for 100 clock cycles
