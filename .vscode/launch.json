@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/media/aruna/Archive/Cleo/evaluator/sha",
-      "program": "/media/aruna/Archive/Cleo/evaluator/sha/build/Debug/outDebug",
+      "cwd": "/media/aruna/Archive/Cleo/evaluator/riscv_crypto_fu_ssha512",
+      "program": "/media/aruna/Archive/Cleo/evaluator/riscv_crypto_fu_ssha512/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
