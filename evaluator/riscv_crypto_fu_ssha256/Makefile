@@ -13,7 +13,7 @@ $(VMODULE): obj_dir/$(VMODULE).mk
 	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
 
 obj_dir/$(VMODULE).mk:
-	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h" $(DUTPATH) --exe tb_$(MODULE).cpp
+	verilator -Wall --trace --public-flat-rw --cc -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h" $(DUTPATH) --exe tb_$(MODULE).cpp
 
 
 toggle:
