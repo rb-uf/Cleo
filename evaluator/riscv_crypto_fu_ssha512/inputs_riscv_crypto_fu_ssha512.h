@@ -1,5 +1,5 @@
 #define ADD_HEADER_TO_CSV() \
-    outputFile << "rs1 input, rs2 input, hw(rs1), hw(rs2)" << std::endl;
+    outputFile << "rs1, rs2, hw(rs1), hw(rs2)" << std::endl;
 
 #define SET_RAND_VALS() \
     top->valid = dis(gen); \

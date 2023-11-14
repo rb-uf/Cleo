@@ -1,5 +1,5 @@
 #Update the module name for the DuT
-MODULE=riscv_crypto_fu_ssha512
+MODULE=riscv_crypto_fu_ssha256
 
 
 VMODULE=V$(MODULE)

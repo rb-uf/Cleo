@@ -21,7 +21,7 @@ Here is the folder structure. both [riscv-crypto](https://github.com/riscv/riscv
 │   ├── scarv-soc
 │   └── xcrypto
 ├── evaluator # evaluator code
-│   ├── power_libs #common files
+│   ├── power_libs #common utility files
 │   ├── riscv_crypto_fu_ssha256
 │   └── riscv_crypto_fu_ssha512
 └── readme.md # You are looking at it

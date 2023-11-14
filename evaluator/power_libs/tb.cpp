@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 #include <random>
-#include "crypto_alg_details.h"
+
 
 // Function to calculate the Hamming weight of a value
 int hammingWeight(uint64_t value) {
