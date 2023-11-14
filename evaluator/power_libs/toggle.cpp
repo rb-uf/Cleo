@@ -2,6 +2,8 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <sstream>
+#include<bits/stdc++.h>
 
 
 // Function to calculate the Hamming distance between two strings
@@ -26,25 +28,40 @@ int hammingWeight(const std::string &str) {
     return weight;
 }
 
+struct SignalInfo {
+    std::string prevValue;
+    std::string nowValue;
+};
+
 // Function to process the VCD file
 void processVCDFile(std::ifstream &file, const std::string &outputFileName) {
     std::ofstream outputFile(outputFileName);
-    outputFile << "Cycle,ToggleCount,HammingWeight\n";
-
+    outputFile << "Cycle,TC,HW\n";
+    std::map<std::string, SignalInfo> signalDictionary;
     std::string line;
-    std::map<std::string, std::string> signalValues;
-    std::map<std::string, int> toggleCounts;
-    std::map<std::string, int> hammingWeights;
+    int HW, HD;
+
 
     while (std::getline(file, line)) {
-        if (line.find("$var") != std::string::npos) {
+        if (line.find("$var") != std::string::npos) { // variable names found
             std::string signalId;
-            file >> signalId;
-            signalId = signalId.substr(1); // Remove the '#' from the signal ID
-            signalValues[signalId] = "";
-            toggleCounts[signalId] = 0;
-            hammingWeights[signalId] = 0;
-        } else if (line[0] == '#') {
+            std::istringstream iss(line);
+            std::string var;
+            iss >> var >> var >> var >> signalId;
+            signalDictionary[signalId].nowValue = "0"; 
+            signalDictionary[signalId].prevValue = "0"; 
+
+        } else if (line[0] == '#') { // New clock cycle found
+            HW = 0; 
+            HD = 0;
+
+            for (const auto& pair : signalDictionary) {
+                // std::cout << "  {\"" << pair.first << "\", " << pair.second.nowValue << "}," << std::endl;
+                HW = HW + hammingWeight(pair.second.nowValue);
+                HD = HD + hammingDistance(pair.second.nowValue, pair.second.prevValue);
+                signalDictionary[pair.first].prevValue = pair.second.nowValue;
+            }   
+
             std::string cycleStr = line.substr(1);
             int cycle = 0;
             try {
@@ -52,19 +69,20 @@ void processVCDFile(std::ifstream &file, const std::string &outputFileName) {
             } catch (const std::invalid_argument &e) {
                 std::cerr << "Invalid argument: " << e.what() << '\n';
                 continue;
-            }
-            for (auto &signal : signalValues) {
-                std::string value;
-                file >> value;
-                if (!signal.second.empty()) {
-                    toggleCounts[signal.first] += hammingDistance(signal.second, value);
-                    hammingWeights[signal.first] += hammingWeight(value);
-                }
-                signalValues[signal.first] = value;
-            }
-            for (const auto &signalId : signalValues) {
-                outputFile << cycle << "," << toggleCounts[signalId.first] << "," << hammingWeights[signalId.first] << "\n";
-            }
+            }            
+            outputFile << cycle << "," << HD << "," << HW << "\n";
+        }
+
+        else if (line[0] == 'b') { // multibit variable found
+            std::string multbitVal = (line.substr(1)).substr(0, (line.substr(1)).find(' '));
+            std::string net = (line.substr(1)).substr((line.substr(1)).find(' ') + 1);
+            signalDictionary[net].nowValue = multbitVal;
+    
+        }
+        else if (line[0] == '1' || line[0] == '0') { // singlebit variable found
+            std::string bitVal(1, line[0]);
+            std::string net = line.substr(1);
+            signalDictionary[net].nowValue = bitVal;
         }
     }
     outputFile.close();
