@@ -47,11 +47,12 @@ docker exec -it sims /bin/bash
 
 ### Evaluating the SoC
 
-First initialize the SoC with below command
+First, initialize the SoC with the below command
+
 ```shell
 cd eut/scarv-soc
 git submodule update --init --recursive
 ```
 
-This will pull clone all the submodules related to the SoC compoenents.
+This will pull and clone all the submodules related to the SoC components.
 

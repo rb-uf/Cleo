@@ -1,6 +1,9 @@
-MODULE=riscv_crypto_fu_ssha512
+MODULE=riscv_crypto_fu_ssha512 #Update the module name for the DuT
+
+
 VMODULE=V$(MODULE)
 DUTPATH=../../eut/riscv-crypto/rtl/crypto-fu/$(MODULE).v
+POWER_LIBS=../power_libs
 
 all: $(VMODULE) toggle concat
 	./obj_dir/$(VMODULE)
@@ -13,14 +16,14 @@ $(VMODULE): obj_dir/$(VMODULE).mk
 	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
 
 obj_dir/$(VMODULE).mk:
-	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h" $(DUTPATH) --exe tb_$(MODULE).cpp
+	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h -include inputs_$(MODULE).h" $(DUTPATH) --exe $(POWER_LIBS)/tb.cpp
 
 
 toggle:
-	g++ ../power_libs/toggle.cpp -o obj_dir/toggle
+	g++ $(POWER_LIBS)/toggle.cpp -o obj_dir/toggle
 
 concat:
-	g++ ../power_libs/concat.cpp -o obj_dir/concat
+	g++ $(POWER_LIBS)/concat.cpp -o obj_dir/concat
 
 clean:
 	rm -rf obj_dir 
