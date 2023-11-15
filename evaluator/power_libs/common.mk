@@ -18,6 +18,11 @@ toggle:
 concat:
 	g++ $(POWER_LIBS)/concat.cpp -o obj_dir/concat
 
+
+plot:
+	$(POWER_LIBS)/plotter $(MODULE).csv
+
+
 clean:
 	rm -rf obj_dir 
 	rm $(MODULE).csv
