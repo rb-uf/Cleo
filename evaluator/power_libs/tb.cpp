@@ -9,6 +9,8 @@
 #include <string>
 #include <random>
 
+#define NUM_CYCLES 500
+
 
 // Function to calculate the Hamming weight of a value
 int hammingWeight(uint64_t value) {
@@ -51,7 +53,7 @@ int main(int argc, char **argv) {
     ADD_HEADER_TO_CSV();
 
     // Simulate for N clock cycles
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < NUM_CYCLES; i++) {
         // Assign random values to inputs
         SET_RAND_VALS();
 

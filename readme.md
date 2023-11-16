@@ -44,6 +44,20 @@ docker exec -it sims /bin/bash
 
 ```
 
+### Pre-Silicon Side Channel Evaluation
+
+Objective: Side-channel sensitive computations should not reveal the information about the information about the inputs to the corresponding functional units. As the evaluation procedure, we feed controlled constraint random inputs to each of the functional units and compute the correlation between the power signature and the input given to the unit.
+
+As an example following is the power side channel signature of the [ssha512](https://github.com/riscv/riscv-crypto/blob/e2dd7d98b7f34d477e38cb5fd7a3af4379525189/rtl/crypto-fu/riscv_crypto_fu_ssha512.v) functional unit and the visual relationship between the input values.
+
+
+<p align="center">
+  <img  src="images/sha512.svg">
+  <p align="center">
+   <em>ssha512 power signature</em>
+   </p>
+</p>
+
 
 ### Evaluating the SoC
 
