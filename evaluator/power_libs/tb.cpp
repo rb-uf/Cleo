@@ -42,6 +42,8 @@ int main(int argc, char **argv) {
 
     std::mt19937_64 generator(std::random_device{}());
     std::uniform_int_distribution<uint64_t> dis64(0, ((uint64_t)1 << 64) - 1);
+    std::uniform_int_distribution<uint64_t> dis32(0, ((uint64_t)1 << 32) - 1);
+    std::uniform_int_distribution<uint64_t> dis2(0, ((uint64_t)1 << 2) - 1);
 
     
     // Open a CSV file for writing

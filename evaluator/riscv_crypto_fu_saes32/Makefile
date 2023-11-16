@@ -16,8 +16,9 @@ all: $(VMODULE) toggle concat
 $(VMODULE): obj_dir/$(VMODULE).mk
 	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
 
+# "riscv_crypto_fu_sboxes.v" was added below to fix a verilator error specific to this module
 obj_dir/$(VMODULE).mk:
-	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h -include ../inputs_$(MODULE).h" $(DUTPATH) --exe $(POWER_LIBS)/tb.cpp
+	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h -include ../inputs_$(MODULE).h" $(DUTPATH) ../../eut/riscv-crypto/rtl/crypto-fu/riscv_crypto_fu_sboxes.v --top-module riscv_crypto_fu_saes32 --exe $(POWER_LIBS)/tb.cpp
 
 
 toggle:
