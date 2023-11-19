@@ -2,6 +2,7 @@
 
 
 #include <verilated_vcd_c.h>
+#include "rand.h"
 
 #include <iostream>
 #include <vector>
