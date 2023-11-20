@@ -81,7 +81,7 @@ def plot_line_chart(csv_file):
     plt.xlabel('Cycles')
     plt.ylabel('Power')
     plt.legend()
-    plt.show()
+    # plt.show()
 
     # Save the plot as an SVG file with the same name as the CSV file
     svg_filename = csv_file.replace('.csv', '.svg')
