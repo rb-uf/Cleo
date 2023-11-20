@@ -37,10 +37,11 @@ git submodule update --init
 
 ```shell
 
-docker pull archfx/rvutils
-git clone <this repo>
-docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name rvutils archfx/rvutils
-docker exec -it sims /bin/bash
+docker pull archfx/cleo
+git clone https://github.com/Archfx/Cleo Cleo
+cd Cleo
+docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name cleo archfx/cleo
+docker exec -it cleo /bin/bash
 
 ```
 
