@@ -3,6 +3,18 @@
 import sys
 import csv
 import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import entropy
+
+def normalize_data(data):
+    normalized_data = []
+    for col in range(len(data[0])):
+        values = [float(row[col]) for row in data[10:]]
+        mean = np.mean(values)
+        std_dev = np.std(values)
+        normalized_values = [(value - mean) / std_dev for value in values]
+        normalized_data.append(normalized_values)
+    return normalized_data
 
 def plot_line_chart(csv_file):
     try:
@@ -22,11 +34,19 @@ def plot_line_chart(csv_file):
         sys.exit(1)
 
     # Use row numbers as x-values
-    x = list(range(1, len(data)))  # Exclude the header
+    x = list(range(10, len(data)))  # Exclude the header
 
-    # Plot each  column as a separate line
-    for i in range(0, len(data[0])):
-        y = [float(row[i]) for row in data[1:]]  # Exclude the header
+    # Normalize each column
+    normalized_data = normalize_data(data)
+
+    # # Plot each  column as a separate line
+    # for i in range(0, len(data[0])):
+    #     y = [float(row[i]) for row in data[1:]]  # Exclude the header
+    #     plt.plot(x, y, label=data[0][i])
+
+    # Plot each normalized column as a separate line
+    for i in range(len(data[0])):
+        y = normalized_data[i]
         plt.plot(x, y, label=data[0][i])
 
     # Use the title from the first column of the first row
@@ -44,6 +64,16 @@ def plot_line_chart(csv_file):
     plt.savefig(svg_filename, format='svg')
 
     print(f"Plot saved as {svg_filename}")
+
+    # Compute and print the KL divergence matrix
+    kl_divergence_matrix = np.zeros((len(data[0]), len(data[0])))
+    for i in range(len(data[0])):
+        for j in range(len(data[0])):
+            if i != j:
+                kl_divergence_matrix[i, j] = entropy(normalized_data[i], normalized_data[j])
+
+    print("KL Divergence Matrix:")
+    print(kl_divergence_matrix)
 
 if __name__ == "__main__":
     # Check if a CSV file is provided as a command-line argument

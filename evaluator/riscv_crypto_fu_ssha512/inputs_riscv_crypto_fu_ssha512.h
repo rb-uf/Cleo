@@ -1,10 +1,10 @@
 #define ADD_HEADER_TO_CSV() \
-    outputFile << "hw(rs1), hw(rs2)" << std::endl;
+    outputFile << "hw(rs1),hw(rs2)" << std::endl;
 
 #define SET_RAND_VALS() \
     top->valid = 1; \
-    top->rs1 = dis64(gen); \
-    top->rs2 = dis64(gen); \
+    top->rs1 = dist64hw(dis64(gen), generator); \
+    top->rs2 = dist64hw(dis64(gen), generator); \
     top->op_ssha512_sum0r = dis(gen); \
     top->op_ssha512_sum1r = dis(gen); \
     top->op_ssha512_sig0l = dis(gen); \
