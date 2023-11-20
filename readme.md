@@ -52,7 +52,7 @@ As an example following is the power side channel signature of the [ssha512](htt
 
 
 <p align="center">
-  <img  src="images/sha512.svg">
+  <img  src="/evaluator/riscv_crypto_fu_ssha512/riscv_crypto_fu_ssha512.svg">
   <p align="center">
    <em>ssha512 power signature</em>
    </p>
