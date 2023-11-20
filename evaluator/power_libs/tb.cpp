@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <bitset>
 
-#define NUM_CYCLES 500
+#define NUM_CYCLES 50000
 
 // Random number generator
 

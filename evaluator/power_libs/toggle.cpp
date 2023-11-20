@@ -36,7 +36,8 @@ struct SignalInfo {
 // Function to process the VCD file
 void processVCDFile(std::ifstream &file, const std::string &outputFileName) {
     std::ofstream outputFile(outputFileName);
-    outputFile << "TC,HW\n";
+    // outputFile << "TC,HW\n";
+    outputFile << "HW\n";
     std::map<std::string, SignalInfo> signalDictionary;
     std::string line;
     int HW, HD;
@@ -70,7 +71,8 @@ void processVCDFile(std::ifstream &file, const std::string &outputFileName) {
                 std::cerr << "Invalid argument: " << e.what() << '\n';
                 continue;
             }            
-            outputFile << HD << "," << HW << "\n";
+            // outputFile << HD << "," << HW << "\n";
+            outputFile << HW << "\n";
         }
 
         else if (line[0] == 'b') { // multibit variable found
