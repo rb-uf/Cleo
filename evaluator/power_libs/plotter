@@ -113,9 +113,9 @@ def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.
   
 
     # Plot "HW" column on the left axis with a chosen color (e.g., red)
-    line_hw, = ax1.plot(x, df['HW'], label='Power', alpha=1, linewidth=line_thickness, color='#99004D')
+    line_hw, = ax1.plot(x, df['HW'], label='power', alpha=1, linewidth=line_thickness, color='#99004D')
     ax1.set_xlabel('Cycles')
-    ax1.set_ylabel('Power (uW)', labelpad=15)
+    ax1.set_ylabel('power (uW)', labelpad=10)
 
   
 
@@ -135,7 +135,7 @@ def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.
             line, = ax2.plot(x, df[column], label=column, alpha=1, linewidth=line_thickness, color=line_color)
             lines_other.append(line)
 
-    ax2.set_ylabel('HW(Inputs)', labelpad=15)
+    ax2.set_ylabel('hw(data)', labelpad=10)
     ax2.tick_params('y')
 
     # # Combine legends from both axes
