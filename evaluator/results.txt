@@ -78,3 +78,43 @@ Chi-squared test for hw(rs12):
 │       211180 │         0 │
 ╘══════════════╧═══════════╛
 
+
+
+
+Chi-squared test results
+Module: riscv_crypto_fu_ssha256.v
+Chi-squared test for hw(rs1):
+╒══════════════╤═══════════╕
+│   Chi2 value │   P-value │
+╞══════════════╪═══════════╡
+│      62439.9 │         0 │
+╘══════════════╧═══════════╛
+
+
+
+
+Chi-squared test results
+Module: riscv_crypto_fu_ssha512.v
+Chi-squared test for hw(rs1):
+╒══════════════╤═══════════╕
+│   Chi2 value │   P-value │
+╞══════════════╪═══════════╡
+│      97413.4 │         0 │
+╘══════════════╧═══════════╛
+
+
+Chi-squared test for hw(rs2):
+╒══════════════╤═══════════╕
+│   Chi2 value │   P-value │
+╞══════════════╪═══════════╡
+│       100473 │         0 │
+╘══════════════╧═══════════╛
+
+
+Chi-squared test for hw(rs12):
+╒══════════════╤═══════════╕
+│   Chi2 value │   P-value │
+╞══════════════╪═══════════╡
+│       215826 │         0 │
+╘══════════════╧═══════════╛
+
