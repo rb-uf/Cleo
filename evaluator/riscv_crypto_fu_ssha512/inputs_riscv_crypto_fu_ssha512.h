@@ -1,5 +1,6 @@
 #define ADD_HEADER_TO_CSV() \
-    outputFile << "hw(rs1),hw(rs2),hw(rs12)" << std::endl;
+    outputFile << "hw(rs1)+hw(rs2)" << std::endl;
+    //outputFile << "hw(rs1),hw(rs2),hw(rs12)" << std::endl;
 
 #define SET_RAND_VALS() \
     top->valid = 1; \
@@ -17,4 +18,6 @@
     top->op_ssha512_sum1 = dis(gen);
 
 #define ADD_ROW_TO_CSV() \
-    outputFile << hammingWeight(top->rs1) << "," << hammingWeight(top->rs2) << "," << hammingWeight(top->rs1 + top->rs2) << std::endl;
+    outputFile << hammingWeight(top->rs1) + hammingWeight(top->rs2) << std::endl;
+    //outputFile << hammingWeight(top->rs1) << "," << hammingWeight(top->rs2) << "," << hammingWeight(top->rs1 + top->rs2) << std::endl;
+

@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+import sys
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from scipy.stats import entropy, chisquare
+from tabulate import tabulate
+import pandas as pd
+
+
+
+def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.8):
+    try:
+        df = pd.read_csv(csv_file, skiprows=range(1, 11))
+    except FileNotFoundError:
+        print(f"Error: File '{csv_file}' not found.")
+        sys.exit(1)
+    except pd.errors.EmptyDataError:
+        print(f"Error: File '{csv_file}' is empty.")
+        sys.exit(1)
+    except pd.errors.ParserError:
+        print(f"Error: Unable to parse data from '{csv_file}'. Make sure it's a valid CSV file.")
+        sys.exit(1)
+
+    # Check if the DataFrame contains at least two columns
+    if len(df.columns) < 2:
+        print("Error: The CSV file must have at least two columns.")
+        sys.exit(1)
+
+
+
+    x = df.index
+    
+    # Set the custom figure size
+    fig, ax1 = plt.subplots(figsize=(figure_width, figure_height))
+
+  
+
+    # Plot "HW" column on the left axis with a chosen color (e.g., red)
+    ax1.set_xlabel('Iterations')
+    ax1.set_ylabel('Randomness')
+
+
+
+    # Define a list of colors for other columns as hex values
+    other_colors = ['#99004D','#235996', '#417505', '#7859A3', '#800080']  # Cyan, Orange, Green, Purple
+
+
+    # Plot other columns on the right axis with complementary colors
+    lines_other = []
+    for i, column in enumerate(df.columns):
+            line_color = other_colors[i % len(other_colors)]  # Cycle through colors if there are more columns than colors
+            line, = ax1.plot(x, df[column], label=column, alpha=1, linewidth=line_thickness, color=line_color)
+            lines_other.append(line)
+
+  
+
+    # # Combine legends from both axes
+
+    legend = ax1.legend(loc='upper center',ncol=2,  frameon=True, facecolor=(1, 1, 1), edgecolor='black', framealpha=1,  fontsize='x-large')
+    
+    # # Set legend background alpha using a workaround
+    legend_legend = legend.legendPatch
+    legend_legend.set_alpha(0.8)
+
+    # title = csv_file.split('.')[0]
+    # plt.title(title)
+
+
+    # Adjust layout to make sure x-axis label is visible
+    plt.tight_layout()
+
+    # Set SVG fonttype to use system fonts
+    plt.rcParams['svg.fonttype'] = 'none'
+
+    # Save the plot as an SVG file with the same name as the CSV file
+    svg_filename = csv_file.replace('.csv', '.svg')
+    plt.savefig(svg_filename, format='svg')
+
+
+
+if __name__ == "__main__":
+    # Check if a CSV file is provided as a command-line argument
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <csv_file>")
+        sys.exit(1)
+
+    csv_file = sys.argv[1]
+    plot_line_chart(csv_file, 8, 3.5)
