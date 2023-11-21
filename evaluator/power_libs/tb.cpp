@@ -27,8 +27,6 @@ uint64_t dist64hw(int weight, std::mt19937_64& gen) {
     return result;
 }
 
-
-
 // Function to calculate the Hamming weight of a value
 int hammingWeight(uint64_t value) {
     int weight = 0;

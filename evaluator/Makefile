@@ -1,15 +1,13 @@
-SUBDIRS := $(wildcard */.)
+TOPTARGETS := all clean
 
-.PHONY: all
+# Filter out power_libs/ from the list of subdirectories
+SUBDIRS := $(filter-out power_libs/., $(wildcard */.))
 
-all:
-    for dir in $(SUBDIRS); do \
-        $(MAKE) -C $$dir all; \
-    done
+# default:
+# 	@echo $(SUBDIRS)
 
-.PHONY: clean
+$(TOPTARGETS): $(SUBDIRS)
+$(SUBDIRS):
+		$(MAKE) -C $@ $(MAKECMDGOALS)
 
-clean:
-    for dir in $(SUBDIRS); do \
-        $(MAKE) -C $$dir clean; \
-    done
+.PHONY: $(TOPTARGETS) $(SUBDIRS)

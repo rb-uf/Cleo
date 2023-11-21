@@ -118,6 +118,15 @@ def plot_line_chart(csv_file):
     # Print tabulated data with colorized values
     print(tabulate(table_data, headers, tablefmt='fancy_grid', numalign='right'))
 
+    # Append tabulated data without colors to "results.txt"
+    with open("../results.txt", "a") as results_file:
+        results_file.write("\n\n")
+        results_file.write("\nJensen Shannon Divergence Matrix\nModule: ")
+        results_file.write(csv_file)
+        results_file.write("\n")
+        results_file.write(tabulate([[data[0][i]] + [f"{jsd_matrix[i, j]:.4f}" if i != j else '-' for j in range(len(data[0]))] for i in range(len(data[0]))], headers, tablefmt='grid', numalign='right'))
+        results_file.write("\n\n")
+
 
 
 if __name__ == "__main__":

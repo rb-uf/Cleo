@@ -4,6 +4,7 @@ all: $(VMODULE) toggle concat
 	./obj_dir/concat $(MODULE).csv
 	rm actual.csv
 	rm toggle.csv
+	$(POWER_LIBS)/plotter $(MODULE).csv
 
 $(VMODULE): obj_dir/$(VMODULE).mk
 	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
@@ -19,10 +20,7 @@ concat:
 	g++ $(POWER_LIBS)/concat.cpp -o obj_dir/concat
 
 
-plot:
-	$(POWER_LIBS)/plotter $(MODULE).csv
-
-
 clean:
 	rm -rf obj_dir 
-	rm $(MODULE).csv
+	rm -f $(MODULE).csv
+	rm -f ../results.txt
