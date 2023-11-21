@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+
+import sys
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from scipy.stats import entropy
+from tabulate import tabulate
+import pandas as pd
+
+def create_contingency_tables(df, power_column='HW'):
+    """
+    Create contingency tables for all column pairs in a DataFrame.
+
+    Parameters:
+    - df: DataFrame containing the data.
+    - power_column: Name of the column containing observed power values.
+
+    Returns:
+    - tables: Dictionary of contingency tables for each pair of columns.
+    """
+    # Exclude the power column from the list of columns
+    feature_columns = df.columns[df.columns != power_column]
+
+    # Initialize an empty dictionary to store contingency tables
+    tables = {}
+
+    # Iterate over all pairs of columns
+    for feature_column in feature_columns:
+        # Create a contingency table for the pair of columns
+        contingency_table = pd.crosstab(df[feature_column], df[power_column])
+        tables[feature_column] = contingency_table
+
+    return tables
+
+
+
+def scale_data(data):
+    scaler = MinMaxScaler(feature_range=(0, 64))
+    scaled_data = scaler.fit_transform(data[10:])
+    return scaled_data
+
+def colorize(value):
+    # Highlight values less than 0.03 in red, others in green
+    if value < 0.03:
+        return f"\033[91m{value:.4f}\033[0m"  # Red color
+    else:
+        return f"\033[92m{value:.4f}\033[0m"  # Green color
+
+def jensen_shannon_divergence(p, q):
+    """
+    Compute the Jensen-Shannon Divergence between two probability distributions.
+    
+    Parameters:
+    - p, q: 1-D numpy arrays representing probability distributions.
+    
+    Returns:
+    - Jensen-Shannon Divergence.
+    """
+    # Normalize distributions to ensure they sum to 1
+    p = p / np.sum(p)
+    q = q / np.sum(q)
+    
+    # Calculate the average distribution
+    m = 0.5 * (p + q)
+    
+    # Compute the Jensen-Shannon Divergence
+    jsd = 0.5 * (entropy(p, m) + entropy(q, m))
+    
+    return jsd
+
+
+def plot_line_chart(csv_file):
+    try:
+        with open(csv_file, 'r') as file:
+            reader = csv.reader(file)
+            data = list(reader)
+    except FileNotFoundError:
+        print(f"Error: File '{csv_file}' not found.")
+        sys.exit(1)
+    except csv.Error:
+        print(f"Error: Unable to parse data from '{csv_file}'. Make sure it's a valid CSV file.")
+        sys.exit(1)
+
+    # Check if the CSV file contains at least two columns
+    if len(data[0]) < 2:
+        print("Error: The CSV file must have at least two columns.")
+        sys.exit(1)
+
+    # Use row numbers as x-values
+    # x = list(range(10, len(data)))  # Exclude the header
+
+    # Scale each column
+    scaled_data = scale_data(data)
+
+
+    # Plot each scaled column as a separate line
+    for i in range(len(data[0])):
+        y = scaled_data[:, i]
+        plt.plot(x, y, label=data[0][i],  alpha=0.5)
+
+    # Use the title from the first column of the first row
+    title = csv_file
+    plt.title(title)
+    title = data[0][0] if data[0][0] else 'Line Chart'
+    plt.title(title)
+    plt.xlabel('Cycles')
+    plt.ylabel('Power')
+    plt.legend()
+    # plt.show()
+
+    # Save the plot as an SVG file with the same name as the CSV file
+    svg_filename = csv_file.replace('.csv', '.svg')
+    plt.savefig(svg_filename, format='svg')
+
+    print(f"Plot saved as {svg_filename}")
+
+    # Compute and print the KL divergence matrix
+    jsd_matrix = np.zeros((len(data[0]), len(data[0])))
+    for i in range(len(data[0])):
+        for j in range(len(data[0])):
+            if i != j:
+                jsd_matrix[i, j] = jensen_shannon_divergence(scaled_data[i], scaled_data[j])
+
+
+
+    # Print the KL divergence matrix with column titles
+    print("\nJensen Shannon Divergence Matrix")
+    print("Module: ",csv_file)
+    # print("\t" + "\t".join(data[0]))
+    # for i in range(len(data[0])):
+    #     print(data[0][i], end="")
+    #     for j in range(len(data[0])):
+    #         if i != j:
+    #             print(f"\t{jsd_matrix[i, j]:.4f}", end="")
+    #         else:
+    #             print("\t-", end="")
+    #     print()  # Newline after each row
+
+     # Prepare data for tabulate
+    headers = [''] + data[0]
+    table_data = [[data[0][i]] + [colorize(jsd_matrix[i, j]) if i != j else '-' for j in range(len(data[0]))] for i in range(len(data[0]))]
+
+    # Print tabulated data with colorized values
+    print(tabulate(table_data, headers, tablefmt='fancy_grid', numalign='right'))
+
+    # Append tabulated data without colors to "results.txt"
+    with open("../results.txt", "a") as results_file:
+        results_file.write("\n\n")
+        results_file.write("\nJensen Shannon Divergence Matrix\nModule: ")
+        results_file.write(csv_file)
+        results_file.write("\n")
+        results_file.write(tabulate([[data[0][i]] + [f"{jsd_matrix[i, j]:.4f}" if i != j else '-' for j in range(len(data[0]))] for i in range(len(data[0]))], headers, tablefmt='grid', numalign='right'))
+        results_file.write("\n\n")
+
+
+
+if __name__ == "__main__":
+    # Check if a CSV file is provided as a command-line argument
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <csv_file>")
+        sys.exit(1)
+
+    csv_file = sys.argv[1]
+    plot_line_chart(csv_file)
