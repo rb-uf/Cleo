@@ -113,7 +113,7 @@ def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.
   
 
     # Plot "HW" column on the left axis with a chosen color (e.g., red)
-    line_hw, = ax1.plot(x, df['HW'], label='HW', alpha=1, linewidth=line_thickness, color='#99004D')
+    line_hw, = ax1.plot(x, df['HW'], label='Power', alpha=1, linewidth=line_thickness, color='#99004D')
     ax1.set_xlabel('Cycles')
     ax1.set_ylabel('Power (uW)')
 
