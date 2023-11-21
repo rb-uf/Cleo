@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
     std::mt19937_64 generator(std::random_device{}());
     std::uniform_int_distribution<uint64_t> dis64(0,64);
     std::uniform_int_distribution<uint64_t> dis32(0,32);
+    std::uniform_int_distribution<uint64_t> dis4(0,4);    
     std::uniform_int_distribution<uint64_t> dis2(0,2);
 
 

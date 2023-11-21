@@ -2,7 +2,7 @@
     outputFile << "rs1, rs2, hw(rs1), hw(rs2)" << std::endl;
 
 #define SET_RAND_VALS() \
-    /* the corresponding verilog file defines two additional inputs not present in the 32 bit version: g_clk and g_resetn */
+    /* the corresponding verilog file defines two additional inputs not present in the 32 bit version: g_clk and g_resetn */ \
     top->valid = 1; \
     top->rs1 = dis64(gen); \
     top->rs2 = dis64(gen); \
