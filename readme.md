@@ -37,10 +37,11 @@ git submodule update --init
 
 ```shell
 
-docker pull archfx/rvutils
-git clone <this repo>
-docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name rvutils archfx/rvutils
-docker exec -it sims /bin/bash
+docker pull archfx/cleo
+git clone https://github.com/Archfx/Cleo Cleo
+cd Cleo
+docker run -t -p 6080:6080 -v "${PWD}/:/Cleo" -w /Cleo --name cleo archfx/cleo
+docker exec -it cleo /bin/bash
 
 ```
 
@@ -52,7 +53,7 @@ As an example following is the power side channel signature of the [ssha512](htt
 
 
 <p align="center">
-  <img  src="images/sha512.svg">
+  <img  src="/evaluator/riscv_crypto_fu_ssha512/riscv_crypto_fu_ssha512.svg">
   <p align="center">
    <em>ssha512 power signature</em>
    </p>
