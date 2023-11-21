@@ -5,127 +5,160 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from scipy.stats import entropy
+from scipy.stats import entropy, chisquare
 from tabulate import tabulate
-
+import pandas as pd
 
 
 def scale_data(data):
-    scaler = MinMaxScaler(feature_range=(0, 64))
-    scaled_data = scaler.fit_transform(data[10:])
+    scaler = MinMaxScaler()
+    scaled_data = scaler.fit_transform(data)
     return scaled_data
 
-def colorize(value):
+def create_contingency_tables(df, power_column='HW'):
+    """
+    Create contingency tables for all column pairs in a DataFrame.
+
+    Parameters:
+    - df: DataFrame containing the data.
+    - power_column: Name of the column containing observed power values.
+
+    Returns:
+    - tables: Dictionary of contingency tables for each pair of columns.
+    """
+    # Exclude the power column from the list of columns
+    feature_columns = df.columns[df.columns != power_column]
+
+    # Initialize an empty dictionary to store contingency tables
+    tables = {}
+
+    # Iterate over all pairs of columns
+    for feature_column in feature_columns:
+        # Create a contingency table for the pair of columns
+        contingency_table = pd.crosstab(df[feature_column], df[power_column])
+        tables[feature_column] = contingency_table
+
+    return tables
+
+def colorize(value, p, threshold=0.05):
     # Highlight values less than 0.03 in red, others in green
-    if value < 0.03:
+    if p < threshold:
         return f"\033[91m{value:.4f}\033[0m"  # Red color
     else:
         return f"\033[92m{value:.4f}\033[0m"  # Green color
 
-def jensen_shannon_divergence(p, q):
-    """
-    Compute the Jensen-Shannon Divergence between two probability distributions.
-    
-    Parameters:
-    - p, q: 1-D numpy arrays representing probability distributions.
-    
-    Returns:
-    - Jensen-Shannon Divergence.
-    """
-    # Normalize distributions to ensure they sum to 1
-    p = p / np.sum(p)
-    q = q / np.sum(q)
-    
-    # Calculate the average distribution
-    m = 0.5 * (p + q)
-    
-    # Compute the Jensen-Shannon Divergence
-    jsd = 0.5 * (entropy(p, m) + entropy(q, m))
-    
-    return jsd
+
+def plot_contingency_tables(tables, output_file=None):
+    with open("../results.txt", "a") as results_file:
+        results_file.write("\n\n")
+        results_file.write("\nChi-squared test results\nModule: ")
+        results_file.write(csv_file.replace('.csv', '.v'))
+        print("Module: \033[95;1m", csv_file.replace('.csv', '.v'), "\033[0m")
+        with open("contingency_tables.txt", "w") as all_tables_file:
+            for feature_column, contingency_table in tables.items():
+                all_tables_file.write(f"\nContingency Table for {feature_column}:\n")
+                all_tables_file.write(tabulate(contingency_table, headers='keys', tablefmt='fancy_grid'))
+                all_tables_file.write("\n\n")
+                
+                # Perform chi-squared test
+                chi2, p_value = chisquare(contingency_table, axis=None)
+
+                print(f"Chi-squared test for {feature_column}:")
+                # Print chi-squared value with color
+                colored_chi2 = colorize(chi2, p_value)
+                colored_p_value = colorize(p_value, p_value)
+                print(tabulate({"Chi2 value": [colored_chi2], "P-value": [colored_p_value]}, tablefmt='fancy_grid', headers='keys'))
+
+                print("")
+
+                # Append tabulated data without colors to "results.txt"
+                results_file.write("\n")
+                results_file.write(f"Chi-squared test for {feature_column}:\n")
+                results_file.write(tabulate({"Chi2 value": [chi2], "P-value": [p_value]}, tablefmt='fancy_grid', headers='keys'))
+                results_file.write("\n\n")
 
 
-def plot_line_chart(csv_file):
+
+def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.8):
     try:
-        with open(csv_file, 'r') as file:
-            reader = csv.reader(file)
-            data = list(reader)
+        df = pd.read_csv(csv_file, skiprows=range(1, 11))
     except FileNotFoundError:
         print(f"Error: File '{csv_file}' not found.")
         sys.exit(1)
-    except csv.Error:
+    except pd.errors.EmptyDataError:
+        print(f"Error: File '{csv_file}' is empty.")
+        sys.exit(1)
+    except pd.errors.ParserError:
         print(f"Error: Unable to parse data from '{csv_file}'. Make sure it's a valid CSV file.")
         sys.exit(1)
 
-    # Check if the CSV file contains at least two columns
-    if len(data[0]) < 2:
+    # Check if the DataFrame contains at least two columns
+    if len(df.columns) < 2:
         print("Error: The CSV file must have at least two columns.")
         sys.exit(1)
 
-    # Use row numbers as x-values
-    x = list(range(10, len(data)))  # Exclude the header
+    # Create contingency tables for each pair of columns
+    tables = create_contingency_tables(df)
 
-    # Scale each column
-    scaled_data = scale_data(data)
+    # Plot contingency tables
+    plot_contingency_tables(tables, output_file=True)
 
-    # Plot each scaled column as a separate line
-    for i in range(len(data[0])):
-        y = scaled_data[:, i]
-        plt.plot(x, y, label=data[0][i],  alpha=0.5)
+    # Define 'x' using the index of the DataFrame
+    df = df.iloc[0:250, :]
+    x = df.index
+    
+    # Set the custom figure size
+    fig, ax1 = plt.subplots(figsize=(figure_width, figure_height))
 
-    # Use the title from the first column of the first row
-    title = csv_file
+  
+
+    # Plot "HW" column on the left axis with a chosen color (e.g., red)
+    line_hw, = ax1.plot(x, df['HW'], label='HW', alpha=1, linewidth=line_thickness, color='#99004D')
+    ax1.set_xlabel('Cycles')
+    ax1.set_ylabel('Power (uW)')
+
+  
+
+    # Create a secondary y-axis for other columns
+    ax2 = ax1.twinx()
+
+    # Define a list of colors for other columns as hex values
+    other_colors = ['#235996', '#417505', '#7859A3', '#800080']  # Cyan, Orange, Green, Purple
+
+
+    # Plot other columns on the right axis with complementary colors
+    lines_other = []
+    for i, column in enumerate(df.columns):
+        if column != 'HW':
+            # Choose a complementary color for each other column
+            line_color = other_colors[i % len(other_colors)]  # Cycle through colors if there are more columns than colors
+            line, = ax2.plot(x, df[column], label=column, alpha=1, linewidth=line_thickness, color=line_color)
+            lines_other.append(line)
+
+    ax2.set_ylabel('HW(Inputs)')
+    ax2.tick_params('y')
+
+    # # Combine legends from both axes
+    all_lines = [line_hw] + lines_other
+    all_labels = [line.get_label() for line in all_lines]
+    legend = ax2.legend(all_lines, all_labels, loc='upper center', ncol=len(all_lines),  frameon=True, facecolor=(1, 1, 1), edgecolor='black', framealpha=1)
+    
+    # # Set legend background alpha using a workaround
+    legend_legend = legend.legendPatch
+    legend_legend.set_alpha(0.8)
+
+    title = csv_file.split('.')[0]
     plt.title(title)
-    title = data[0][0] if data[0][0] else 'Line Chart'
-    plt.title(title)
-    plt.xlabel('Cycles')
-    plt.ylabel('Power')
-    plt.legend()
-    # plt.show()
+
+    # Adjust layout to make sure x-axis label is visible
+    plt.tight_layout()
+
+    # Set SVG fonttype to use system fonts
+    plt.rcParams['svg.fonttype'] = 'path'
 
     # Save the plot as an SVG file with the same name as the CSV file
     svg_filename = csv_file.replace('.csv', '.svg')
     plt.savefig(svg_filename, format='svg')
-
-    print(f"Plot saved as {svg_filename}")
-
-    # Compute and print the KL divergence matrix
-    jsd_matrix = np.zeros((len(data[0]), len(data[0])))
-    for i in range(len(data[0])):
-        for j in range(len(data[0])):
-            if i != j:
-                jsd_matrix[i, j] = jensen_shannon_divergence(scaled_data[i], scaled_data[j])
-
-
-
-    # Print the KL divergence matrix with column titles
-    print("\nJensen Shannon Divergence Matrix")
-    print("Module: ",csv_file)
-    # print("\t" + "\t".join(data[0]))
-    # for i in range(len(data[0])):
-    #     print(data[0][i], end="")
-    #     for j in range(len(data[0])):
-    #         if i != j:
-    #             print(f"\t{jsd_matrix[i, j]:.4f}", end="")
-    #         else:
-    #             print("\t-", end="")
-    #     print()  # Newline after each row
-
-     # Prepare data for tabulate
-    headers = [''] + data[0]
-    table_data = [[data[0][i]] + [colorize(jsd_matrix[i, j]) if i != j else '-' for j in range(len(data[0]))] for i in range(len(data[0]))]
-
-    # Print tabulated data with colorized values
-    print(tabulate(table_data, headers, tablefmt='fancy_grid', numalign='right'))
-
-    # Append tabulated data without colors to "results.txt"
-    with open("../results.txt", "a") as results_file:
-        results_file.write("\n\n")
-        results_file.write("\nJensen Shannon Divergence Matrix\nModule: ")
-        results_file.write(csv_file)
-        results_file.write("\n")
-        results_file.write(tabulate([[data[0][i]] + [f"{jsd_matrix[i, j]:.4f}" if i != j else '-' for j in range(len(data[0]))] for i in range(len(data[0]))], headers, tablefmt='grid', numalign='right'))
-        results_file.write("\n\n")
 
 
 
@@ -136,4 +169,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     csv_file = sys.argv[1]
-    plot_line_chart(csv_file)
+    plot_line_chart(csv_file, 8, 2.5)

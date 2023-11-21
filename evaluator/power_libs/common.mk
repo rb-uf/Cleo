@@ -23,4 +23,6 @@ concat:
 clean:
 	rm -rf obj_dir 
 	rm -f $(MODULE).csv
+	rm -f $(MODULE).svg
 	rm -f ../results.txt
+	rm contingency_tables.txt
