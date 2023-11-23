@@ -23,7 +23,6 @@ T distHw(int weight, std::mt19937_64& gen) {
         int bitPosition = std::uniform_int_distribution<int>(0, bitWidth - 1 - i)(gen);
         result |= (T(1) << bitPosition);
     }
-
     return result;
 }
 
@@ -42,7 +41,6 @@ int main(int argc, char **argv) {
 
     Verilated::traceEverOn(true); // Enable VCD tracing
 
-
     // Instantiate the module
     MODULENAME *top = new MODULENAME;
 
@@ -56,18 +54,16 @@ int main(int argc, char **argv) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, 1);
 
-
     std::mt19937_64 generator(std::random_device{}());
     std::uniform_int_distribution<uint64_t> dis64(0,64);
     std::uniform_int_distribution<uint64_t> dis32(0,32);
     std::uniform_int_distribution<uint64_t> dis4(0,4);    
     std::uniform_int_distribution<uint64_t> dis2(0,2);
-
     
     // Open a CSV file for writing
     std::ofstream outputFile("actual.csv");
     ADD_HEADER_TO_CSV();
-
+    outputFile << "0" << std::endl; // Align the inputs with outputs
     // Simulate for N clock cycles
     for (int i = 0; i < NUM_CYCLES; i++) {
         // Assign random values to inputs

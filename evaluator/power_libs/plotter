@@ -5,27 +5,13 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from scipy.stats import entropy, chisquare
+from scipy.stats import entropy, chisquare, chi2_contingency
 from tabulate import tabulate
 import pandas as pd
 
 
-def scale_data(data):
-    scaler = MinMaxScaler()
-    scaled_data = scaler.fit_transform(data)
-    return scaled_data
 
 def create_contingency_tables(df, power_column='HW'):
-    """
-    Create contingency tables for all column pairs in a DataFrame.
-
-    Parameters:
-    - df: DataFrame containing the data.
-    - power_column: Name of the column containing observed power values.
-
-    Returns:
-    - tables: Dictionary of contingency tables for each pair of columns.
-    """
     # Exclude the power column from the list of columns
     feature_columns = df.columns[df.columns != power_column]
 
@@ -39,6 +25,7 @@ def create_contingency_tables(df, power_column='HW'):
         tables[feature_column] = contingency_table
 
     return tables
+    
 
 def colorize(value, p, threshold=0.05):
     # Highlight values less than 0.03 in red, others in green
@@ -61,14 +48,12 @@ def plot_contingency_tables(tables, output_file=None):
                 all_tables_file.write("\n\n")
                 
                 # Perform chi-squared test
-                chi2, p_value = chisquare(contingency_table, axis=None)
-
+                chi2, p_value, df, expected = chi2_contingency(contingency_table)
                 print(f"Chi-squared test for {feature_column}:")
                 # Print chi-squared value with color
                 colored_chi2 = colorize(chi2, p_value)
                 colored_p_value = colorize(p_value, p_value)
                 print(tabulate({"Chi2 value": [colored_chi2], "P-value": [colored_p_value]}, tablefmt='fancy_grid', headers='keys'))
-
                 print("")
 
                 # Append tabulated data without colors to "results.txt"
@@ -110,21 +95,16 @@ def plot_line_chart(csv_file, figure_width=8, figure_height=4, line_thickness=0.
     # Set the custom figure size
     fig, ax1 = plt.subplots(figsize=(figure_width, figure_height))
 
-  
-
     # Plot "HW" column on the left axis with a chosen color (e.g., red)
     line_hw, = ax1.plot(x, df['HW'], label='power', alpha=1, linewidth=line_thickness, color='#99004D')
     ax1.set_xlabel('Cycles')
     ax1.set_ylabel('power (uW)', labelpad=10)
-
-  
 
     # Create a secondary y-axis for other columns
     ax2 = ax1.twinx()
 
     # Define a list of colors for other columns as hex values
     other_colors = ['#235996', '#417505', '#7859A3', '#800080']  # Cyan, Orange, Green, Purple
-
 
     # Plot other columns on the right axis with complementary colors
     lines_other = []
