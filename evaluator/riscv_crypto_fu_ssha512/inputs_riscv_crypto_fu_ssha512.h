@@ -4,8 +4,8 @@
 
 #define SET_RAND_VALS() \
     top->valid = 1; \
-    top->rs1 = dist64hw(dis64(gen), generator); \
-    top->rs2 = dist64hw(dis64(gen), generator); \
+    top->rs1 = distHw<uint64_t>(dis64(gen), generator); \
+    top->rs2 = distHw<uint64_t>(dis64(gen), generator); \
     top->op_ssha512_sum0r = dis(gen); \
     top->op_ssha512_sum1r = dis(gen); \
     top->op_ssha512_sig0l = dis(gen); \

@@ -25,4 +25,4 @@ clean:
 	rm -f $(MODULE).csv
 	rm -f $(MODULE).svg
 	rm -f ../results.txt
-	rm contingency_tables.txt
+	rm -f contingency_tables.txt

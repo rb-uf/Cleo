@@ -15,13 +15,13 @@
 // Random number generator
 
 // Function to generate a random 64-bit number with a specific Hamming weight
-uint64_t dist64hw(int weight, std::mt19937_64& gen) {
-    std::uniform_int_distribution<uint64_t> dist(0, std::numeric_limits<uint64_t>::max());
-
-    uint64_t result = 0;
+template <typename T>
+T distHw(int weight, std::mt19937_64& gen) {
+    T result = 0;
+    constexpr int bitWidth = sizeof(T) * 8;
     for (int i = 0; i < weight; ++i) {
-        int bitPosition = std::uniform_int_distribution<int>(0, 63 - i)(gen);
-        result |= (1ULL << bitPosition);
+        int bitPosition = std::uniform_int_distribution<int>(0, bitWidth - 1 - i)(gen);
+        result |= (T(1) << bitPosition);
     }
 
     return result;
@@ -63,11 +63,6 @@ int main(int argc, char **argv) {
     std::uniform_int_distribution<uint64_t> dis4(0,4);    
     std::uniform_int_distribution<uint64_t> dis2(0,2);
 
-
-    // uint64_t randomNum = dist64hw(6, generator);
-    // std::bitset<64> binaryRepresentation(randomNum);
-    // std::cout << "Binary Representation: " << binaryRepresentation << std::endl;
-    // std::cout << "Random Number: " << randomNum << ", Hamming Weight: " << std::bitset<64>(randomNum).count() << std::endl;
     
     // Open a CSV file for writing
     std::ofstream outputFile("actual.csv");
