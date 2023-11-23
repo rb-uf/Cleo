@@ -10,20 +10,28 @@ This project is a TVLA framework for RISC-V cryptography extension standardizati
 
 ### Project Structure
 
-Here is the folder structure. both [riscv-crypto](https://github.com/riscv/riscv-crypto/) and [xcrypto](https://github.com/scarv/xcrypto) are initialized as submodules.
+Here is the folder structure. Both [riscv-crypto](https://github.com/riscv/riscv-crypto/) and [xcrypto](https://github.com/scarv/xcrypto) are initialized as submodules.
 
 
 ```bash
-├── dockerfile
-│   └── Dockerfile
+.
+├── docker
+│   └── dockerfile # Environement
 ├── eut # extenstions under test
-│   ├── riscv-crypto
-│   ├── scarv-soc
-│   └── xcrypto
-├── evaluator # evaluator code
-│   ├── power_libs #common utility files
-│   ├── riscv_crypto_fu_ssha256
-│   └── riscv_crypto_fu_ssha512
+│   ├── riscv-crypto
+│   ├── scarv-soc
+│   └── xcrypto
+├── evaluator # evaluator core
+│   ├── generator 
+│   ├── Makefile # make to run all
+│   ├── power_libs # common utility files
+│   ├── results.txt # Summary
+│   ├── riscv_crypto_fu_saes32
+│   ├── riscv_crypto_fu_saes64
+│   ├── riscv_crypto_fu_ssha256
+│   ├── riscv_crypto_fu_ssha512
+│   ├── xc_sha256
+│   └── xc_sha512
 └── readme.md # You are looking at it
 ```
 
