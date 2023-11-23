@@ -10,7 +10,7 @@ $(VMODULE): obj_dir/$(VMODULE).mk
 	make -C obj_dir -f $(VMODULE).mk $(VMODULE)
 
 obj_dir/$(VMODULE).mk:
-	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h -include ../inputs_$(MODULE).h " $(DUTPATH) --exe $(POWER_LIBS)/tb.cpp
+	verilator -Wall --trace --public-flat-rw --cc  -Wno-lint -CFLAGS "-DMODULENAME=$(VMODULE) -include $(VMODULE).h -include ../inputs_$(MODULE).h" $(DUTPATH) $(OTHERPATH) --top-module $(MODULE) --exe $(POWER_LIBS)/tb.cpp
 
 
 toggle:
