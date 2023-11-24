@@ -31,7 +31,8 @@ Here is the folder structure. Both [riscv-crypto](https://github.com/riscv/riscv
 │   ├── riscv_crypto_fu_ssha256
 │   ├── riscv_crypto_fu_ssha512
 │   ├── xc_sha256
-│   └── xc_sha512
+│   ├── xc_sha512
+│   └── xc_soc # Evaluation of the xcrypto soc
 └── readme.md # You are looking at it
 ```
 

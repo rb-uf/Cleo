@@ -9,7 +9,6 @@ XCRYPTO_RTL=../../eut/xcrypto/rtl
 SCARV_CPU=../../eut/scarv-soc/extern/scarv-cpu
 
 
-
 VMODULE=V$(MODULE)
 # Top module
 DUTPATH=$(SOC_HOME)/rtl/soc/$(MODULE).v
